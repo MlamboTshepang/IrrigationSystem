@@ -1,0 +1,66 @@
+//Define wetSoil
+#define Wetsoil 300
+//Define drySoil
+#define Drysoil 500
+
+
+// Define analog input
+//#define sensorPin A0
+
+//Save the information even when it's not plugged in
+#include <EEPROM.h>
+int save = 0;
+//setting up the main relay pin
+const int RELAY_PIN = 13;
+
+void setup() {
+  // Setup Serial Monitor
+  Serial.begin(9600);
+  Serial.print("Starting Now");
+  // find the pins
+  pinMode (RELAY_PIN, OUTPUT);
+}
+
+void loop() {
+  int Moist = analogRead(A0);
+  delay(1000);
+  digitalWrite(RELAY_PIN, HIGH);
+
+  // Print the value to the serial monitor
+  Serial.print("Analog output: ");
+  Serial.println(Moist);
+
+
+  if (Moist <= Wetsoil)
+  {
+    Serial.println("Soil Status: Too Wet");
+    }
+  else if (Moist >= Wetsoil && Moist <= Drysoil)
+   {
+    Serial.println("jussst riiight ");
+    digitalWrite(RELAY_PIN,HIGH);
+    delay(1000);
+    }
+  else if(Drysoil < Moist)
+  { 
+    Serial.println("Soil too dry home fry");
+    digitalWrite(RELAY_PIN, LOW);
+    }
+    
+//
+//  //Read the save
+//  int SaveVal = Moist/4;
+//  EEPROM.write(save,SaveVal);
+//    // Read the new value
+//  save = save + 1;
+//  if (save == EEPROM.length())
+//    {
+//      save = 0;
+//    }
+//  
+//  Serial.println("Value saved home boii");
+//  
+  // Wait for 1 second before the next reading
+  delay(5000);
+
+}
